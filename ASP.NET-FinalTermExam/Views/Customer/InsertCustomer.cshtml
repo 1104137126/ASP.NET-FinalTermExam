@@ -1,0 +1,27 @@
+﻿@model CustomerModel.Customer
+
+<html>
+<head>
+    <title>查詢客戶</title>
+</head>
+<body>
+    @using (Html.BeginForm("InsertCustomerAction", "Customer"))
+    {
+        <table border="1" cellspacing="0">
+            <tr><td>*名稱</td><td>@Html.TextBox("CompanyName")</td></tr>
+            <tr><td>*聯絡人姓名</td><td>@Html.TextBox("ContactName")</td></tr>
+            <tr><td>*聯絡人職稱</td><td>@Html.DropDownList("ContactTitle", ViewBag.ContactTitle as SelectList, "")</td></tr>
+            <tr><td>*建立日期</td><td>@Html.TextBox("CreationDate", "", new { @Type = "date" })</td></tr>
+            <tr><td>*國家</td><td>@Html.TextBox("Country")</td></tr>
+            <tr><td>*城市</td><td>@Html.TextBox("City")</td></tr>
+            <tr><td>區域</td><td>@Html.TextBox("Region")</td></tr>
+            <tr><td>郵遞區號</td><td>@Html.TextBox("PostalCode")</td></tr>
+            <tr><td>*地址</td><td>@Html.TextBox("Address")</td></tr>
+            <tr><td>*電話</td><td>@Html.TextBox("Phone")</td></tr>
+            <tr><td>傳真</td><td>@Html.TextBox("Fax")</td></tr>
+            <tr><td></td><td><input type="submit" value="存檔" /> <input type="button" value="回前一頁" onclick="window.location='@Url.Action("Index", "Customer")'"></td></tr>
+        </table>
+    }
+</body>
+</html>
+

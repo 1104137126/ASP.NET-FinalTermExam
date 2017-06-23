@@ -1,0 +1,85 @@
+﻿@model CustomerModel.Customer
+
+<html>
+    <head>
+        <title>查詢客戶</title>
+        <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.common.min.css">
+        <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.rtl.min.css" />
+        <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.silver.min.css" />
+        <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.2.504/styles/kendo.mobile.all.min.css" />
+        <script src="http://code.jquery.com/jquery-1.12.3.min.js"></script>
+        <script src="http://kendo.cdn.telerik.com/2017.2.504/js/kendo.all.min.js"></script>
+    </head>
+    <body>
+        <form id="form">
+            <table border="1" cellspacing="0">
+                <tr><td>客戶編號</td><td>@Html.TextBox("CustomerID")</td></tr>
+                <tr><td>客戶名稱</td><td>@Html.TextBox("CompanyName")</td></tr>
+                <tr><td>聯絡人姓名</td><td>@Html.TextBox("ContactName")</td></tr>
+                <tr><td>聯絡人職稱</td><td>@Html.DropDownList("ContactTitle", ViewBag.ContactTitle as SelectList, "")</td></tr>
+                <tr><td></td><td><input type="button" id="SearchBtn" value="查詢" /> <input type="reset" value="清除" /> <input type="button" id="NewCustomer" value="新增客戶" onclick="window.location='@Url.Action("InsertCustomer", "Customer")'" /></td></tr>
+            </table>
+        </form>
+        <div id="grid">
+        </div>
+    </body>
+    <script>
+            $(document).ready(function () {
+                $("#SearchBtn").click(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Customer/SearchResult",
+                        data: $("#form").serialize(),
+                        dataType:"json",
+                        success: function (output) {
+                            var datasource = new kendo.data.DataSource({
+                                data: output,
+                                schema: {
+                                    model: {
+                                        fields: {
+                                            CustomerID: { type: "string" },
+                                            CompanyName: { type: "string" },
+                                            ContactName: { type: "string" },
+                                            ContacTitle: { type: "string" }
+                                        }
+                                    }
+                                },
+                                pageSize:20
+                            });
+                            $("#grid").kendoGrid({
+                                dataSource:datasource,
+                                height: 550,
+                                groupable: false,
+                                sortable: true,
+                                pageable:{
+                                    refresh: true,
+                                    pageSizes: true,
+                                    buttonCount:5,
+                                    messages:{
+                                        display: "第 {0}項 到 {1}項 總共 {2}項",
+                                        empty: "無資料",
+                                        itemsPerPage: "項／頁"
+                                    }
+                                },
+                                columns: [{
+                                    field: "CustomerID",
+                                    title:"客戶編號"
+                                }, {
+                                    field: "CompanyName",
+                                    title: "客戶名稱"
+                                }, {
+                                    field: "ContactName",
+                                    title: "聯絡人名稱",
+                                }, {
+                                    field: "ContactTitle",
+                                    title: "聯絡人稱號",
+                                }]
+                                
+                            });
+                        }
+                    })
+                });
+            });
+    </script>
+</html>
+
